@@ -34,9 +34,6 @@ It allows you to:
 Before executing operations, you should register the handlers (processors) for the corresponding operation types. This can be done, for example, in a component or service constructor:
 
 ```typescript
-import { Component } from '@angular/core';
-import { OfflineHandleService } from './services/offline-handle.service';
-
 @Component({
   selector: 'app-root',
   template: `<h1>OfflineHandleService Usage Example</h1>
@@ -54,19 +51,16 @@ export class AppComponent {
     });
   }
 
-  sendData() {
+  public sendData() {
     const payload = { id: 123, message: 'Example payload' };
-
     this.offlineHandleService.executeOperation('processData', payload, async () => {
       // Execute the primary operation, e.g., calling an API to send data
       console.log('Attempting to send data:', payload);
       // If the device is offline or an error occurs, the operation will be saved
       return Promise.resolve('Operation executed');
-    })
-    .then(response => {
+    }).then(response => {
       console.log(response);
-    })
-    .catch(error => {
+    }).catch(error => {
       console.error('Error executing operation:', error);
     });
   }
@@ -78,17 +72,12 @@ export class AppComponent {
 Below is a complete example of a component demonstrating both the registration of an operation handler and the execution of an operation:
 
 ```typescript
-import { Component } from '@angular/core';
-import { OfflineHandleService } from './services/offline-handle.service';
-
 @Component({
   selector: 'app-sample',
-  template: `
-    <div>
-      <h2>OfflineHandleService Demonstration</h2>
-      <button (click)="onProcessData()">Process Data</button>
-    </div>
-  `
+  template: `<div>
+              <h2>OfflineHandleService Demonstration</h2>
+              <button (click)="onProcessData()">Process Data</button>
+            </div>`
 })
 export class SampleComponent {
   constructor(private offlineHandleService: OfflineHandleService) {
@@ -100,7 +89,7 @@ export class SampleComponent {
     });
   }
 
-  onProcessData(): void {
+  public onProcessData(): void {
     const data = { timestamp: new Date(), value: 42 };
 
     this.offlineHandleService.executeOperation('processData', data, async () => {
@@ -108,11 +97,9 @@ export class SampleComponent {
       // Here you can add an API call to actually process the data.
       // In this example, we simulate a successful operation.
       return Promise.resolve('Operation executed successfully');
-    })
-    .then(result => {
+    }).then(result => {
       console.log('Operation result:', result);
-    })
-    .catch(error => {
+    }).catch(error => {
       console.error('Error or operation saved for later processing:', error);
     });
   }
